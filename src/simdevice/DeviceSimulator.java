@@ -8,6 +8,7 @@ package simdevice;
 import com.google.gson.JsonObject;
 import com.ibm.iotf.client.device.DeviceClient;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -18,22 +19,29 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  *
  * @author andreaswassmer
  */
-public class DeviceSimulator {
+public class DeviceSimulator implements SensorType {
 
     private final static String PROPERTIES_FILE_NAME = "device.properties";
     private String propertyFileName;
     Random rand = new Random();
-    
+    ArrayList<Sensor> sensors;
+
     static Logger logger = Logger.getLogger(DeviceSimulator.class.getName());
+
     /**
-     * @param args the command line arguments
+     * @param propertyFile Full path to property file
      */
     public DeviceSimulator(String propertyFile) {
         this.propertyFileName = propertyFile;
+        sensors = new ArrayList<>();
     }
-    
+
+    public void addSensor(Sensor sensor) {
+        sensors.add(sensor);
+    }
+
     public void measure() {
-       Properties options = DeviceClient.parsePropertiesFile(new File(PROPERTIES_FILE_NAME));
+        Properties options = DeviceClient.parsePropertiesFile(new File(PROPERTIES_FILE_NAME));
         DeviceClient myClient = null;
         try {
             myClient = new DeviceClient(options);
@@ -41,33 +49,37 @@ public class DeviceSimulator {
             logger.severe("Could not create a connection client to Watson\nReason: " + ex.getLocalizedMessage());
             System.exit(1);
         }
-        
+
         if (myClient == null) {
             logger.severe("Could not connect to Watson\nTerminating...\n");
             System.exit(1);
         }
-        
+
         try {
             myClient.connect();
         } catch (MqttException ex) {
             logger.severe("Could not connect to Watson\nReason: " + ex.getLocalizedMessage());
         }
 
-
         JsonObject event = new JsonObject();
-        event.addProperty("name", "foo");
-        
-        int cpuUsage = rand.nextInt(100)+1;
-        event.addProperty("cpu", cpuUsage);
-        event.addProperty("mem", 70);
-        
+        Sensor sensor = sensors.get(0);
+        switch (sensor.getType()) {
+            case SensorType.TEMPERATURE:
+                event.addProperty("name", sensor.getName());
+                event.addProperty("temperature", ((TemperatureSensor) sensor).measure());
+        }
+
         myClient.publishEvent("status", event, 1);
+        //logger.info(event.toString());
         logger.info("SUCCESSFULLY POSTED.......");
-        
-        myClient.disconnect();      
+
+        myClient.disconnect();
     }
+
     public static void main(String[] args) {
         DeviceSimulator theDevice = new DeviceSimulator(PROPERTIES_FILE_NAME);
+        theDevice.addSensor(new TemperatureSensor());
+
         for (int i = 0; i < 10; i++) {
             theDevice.measure();
             try {
