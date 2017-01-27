@@ -62,15 +62,20 @@ public class DeviceSimulator implements SensorType {
         }
 
         JsonObject event = new JsonObject();
-        Sensor sensor = sensors.get(0);
-        switch (sensor.getType()) {
-            case SensorType.TEMPERATURE:
-                event.addProperty("name", sensor.getName());
-                event.addProperty("temperature", ((TemperatureSensor) sensor).measure());
-        }
+        event.addProperty("name", "Simulated Device");
 
+        for (Sensor aSensor : sensors) {
+            switch (aSensor.getType()) {
+                case SensorType.TEMPERATURE:
+                    event.addProperty("temperature", ((TemperatureSensor) aSensor).measure());
+                    break;
+                case SensorType.HUMIDITY:
+                    event.addProperty("humidity", ((HumiditySensor) aSensor).measure());
+                    break;
+            }
+        }
         myClient.publishEvent("status", event, 1);
-        //logger.info(event.toString());
+        logger.info(event.toString());
         logger.info("SUCCESSFULLY POSTED.......");
 
         myClient.disconnect();
@@ -79,6 +84,7 @@ public class DeviceSimulator implements SensorType {
     public static void main(String[] args) {
         DeviceSimulator theDevice = new DeviceSimulator(PROPERTIES_FILE_NAME);
         theDevice.addSensor(new TemperatureSensor());
+        theDevice.addSensor(new HumiditySensor());
 
         for (int i = 0; i < 10; i++) {
             theDevice.measure();
