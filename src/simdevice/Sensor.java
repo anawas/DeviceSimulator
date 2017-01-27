@@ -43,6 +43,22 @@ public abstract class Sensor {
         int res = reading.nextInt(rangeEnd.intValue()) + rangeStart.intValue();
         return res;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
     
     public double readValueAsDouble() {
         double res = reading.nextDouble() * range + rangeStart;
