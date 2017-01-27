@@ -21,6 +21,6 @@ public class HumiditySensor extends Sensor implements Measuring, SensorType {
     @Override
     public String measure() {
         double res = this.readValueAsDouble();
-        return String.valueOf(res);
+        return String.format("%.2f", res);        
     }
 }
