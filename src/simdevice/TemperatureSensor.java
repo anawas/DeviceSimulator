@@ -14,8 +14,8 @@ public class TemperatureSensor extends Sensor implements Measuring, SensorType {
     public TemperatureSensor() {
         super();
         this.setRange(-10, 100);
-        this.type = SensorType.TEMPERATURE;
-        this.name = "Temperature";
+        type = SensorType.TEMPERATURE;
+        name = "Temperature";
     }
     
     @Override
