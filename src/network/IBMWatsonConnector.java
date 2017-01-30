@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.ibm.iotf.client.device.DeviceClient;
 import com.sun.istack.internal.logging.Logger;
 import java.io.File;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -25,7 +26,7 @@ public class IBMWatsonConnector {
         this.propertyFileName = propertyFilename;
     }
 
-    public void sendToPlatform(JsonObject event) throws Exception, MqttException {
+    public void sendToPlatform(JsonObject event) throws MqttException, UnknownHostException, Exception {
         
         if (propertyFileName == null) {
             throw new Exception("Property file name missing");
