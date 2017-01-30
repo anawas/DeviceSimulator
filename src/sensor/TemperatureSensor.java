@@ -5,6 +5,8 @@
  */
 package sensor;
 
+import simdevice.Measuring;
+
 /**
  *
  * @author andreaswassmer

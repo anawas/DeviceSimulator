@@ -74,7 +74,7 @@ public class DeviceSimulator implements SensorType {
                     break;
             }
         }
-        myClient.publishEvent("status", event, 1);
+        //myClient.publishEvent("status", event, 1);
         logger.info(event.toString());
         logger.info("SUCCESSFULLY POSTED.......");
 
