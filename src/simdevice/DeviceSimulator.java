@@ -19,9 +19,11 @@ import sensor.*;
  * @author andreaswassmer
  */
 public class DeviceSimulator implements SensorType {
-    final String PROPERTIES_FILE_NAME = "device.properties";
+
+    final String PROPERTIES_FILE_NAME = "javadevice2.properties";
     Random rand = new Random();
     ArrayList<Sensor> sensors;
+    ArrayList<IBMWatsonConnector> connectors;
 
     static Logger logger = Logger.getLogger(DeviceSimulator.class.getName());
 
@@ -30,6 +32,10 @@ public class DeviceSimulator implements SensorType {
      */
     public DeviceSimulator() {
         sensors = new ArrayList<>();
+        connectors = new ArrayList<>();
+
+        connectors.add(new IBMWatsonConnector("device.properties"));
+        connectors.add(new IBMWatsonConnector("javadevice2.properties"));
     }
 
     public void addSensor(Sensor sensor) {
@@ -38,7 +44,6 @@ public class DeviceSimulator implements SensorType {
 
     public void measure() {
 
-        IBMWatsonConnector conn = new IBMWatsonConnector(PROPERTIES_FILE_NAME);
         JsonObject event = new JsonObject();
         event.addProperty("name", "Simulated Device");
 
@@ -52,9 +57,11 @@ public class DeviceSimulator implements SensorType {
                     break;
             }
         }
-        
+
         try {
-            conn.sendToPlatform(event);
+            for (IBMWatsonConnector conn : connectors) {
+                conn.sendToPlatform(event);
+            }
         } catch (UnknownHostException ex) {
             //Logger.getLogger(DeviceSimulator.class.getName()).log(Level.SEVERE, null, ex);
             Logger.getLogger(DeviceSimulator.class.getName()).log(Level.SEVERE, "Could not open connection to platform");
