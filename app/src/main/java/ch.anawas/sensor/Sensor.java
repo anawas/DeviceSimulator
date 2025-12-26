@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package ch.anawas.sensor;
-
-import javafx.beans.binding.DoubleExpression;
-
 import java.util.Random;
 
 /**
@@ -68,8 +65,6 @@ public abstract class Sensor {
     public boolean readStatus() {
         int value = reading.nextInt();
 
-        if (value == 0)
-            return true;
-        return false;
+       return value == 0;
     }
 }
