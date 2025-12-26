@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ch.anawas.network.IBMWatsonConnector;
+import ch.anawas.network.PlatformConnector;
 import ch.anawas.sensor.*;
 
 /**
@@ -23,7 +23,7 @@ public class DeviceSimulator implements SensorType {
     final String PROPERTIES_FILE_NAME = "javadevice2.properties";
     Random rand = new Random();
     ArrayList<Sensor> sensors;
-    ArrayList<IBMWatsonConnector> connectors;
+    ArrayList<PlatformConnector> connectors;
 
     static Logger logger = Logger.getLogger(DeviceSimulator.class.getName());
 
@@ -31,8 +31,8 @@ public class DeviceSimulator implements SensorType {
         sensors = new ArrayList<>();
         connectors = new ArrayList<>();
 
-        connectors.add(new IBMWatsonConnector("device.properties"));
-        connectors.add(new IBMWatsonConnector("javadevice2.properties"));
+        connectors.add(new PlatformConnector("device.properties"));
+        connectors.add(new PlatformConnector("javadevice2.properties"));
     }
 
     public void addSensor(Sensor sensor) {
@@ -56,7 +56,7 @@ public class DeviceSimulator implements SensorType {
         }
 
         try {
-            for (IBMWatsonConnector conn : connectors) {
+            for (PlatformConnector conn : connectors) {
                 conn.sendToPlatform(event);
             }
         } catch (UnknownHostException ex) {

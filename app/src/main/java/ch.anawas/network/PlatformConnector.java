@@ -12,12 +12,12 @@ import java.util.logging.Logger;
  *
  * @author andreaswassmer
  */
-public class IBMWatsonConnector {
+public class PlatformConnector {
 
     private final String propertyFileName;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public IBMWatsonConnector(String propertyFilename) {
+    public PlatformConnector(String propertyFilename) {
         this.propertyFileName = propertyFilename;
     }
 
@@ -26,19 +26,6 @@ public class IBMWatsonConnector {
         if (propertyFileName == null) {
             throw new Exception("Property file name missing");
         }
-        
         System.out.println("Sending data to platform: " + event.toString());
-
-        /*
-        myClient = new DeviceClient(options);
-        if (myClient == null) {
-            logger.severe("Could not connect to Watson\nTerminating...\n");
-            System.exit(1);
-        }
-
-        myClient.connect();
-        myClient.publishEvent("status", event, 1);
-        myClient.disconnect();
-         */
     }
 }
