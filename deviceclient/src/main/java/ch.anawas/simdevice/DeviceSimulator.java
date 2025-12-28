@@ -8,7 +8,6 @@ package ch.anawas.simdevice;
 import com.google.gson.JsonObject;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ch.anawas.network.PlatformConnector;
@@ -21,16 +20,18 @@ import ch.anawas.sensor.*;
 public class DeviceSimulator implements SensorType {
 
     final String PROPERTIES_FILE_NAME = "javadevice2.properties";
-    Random rand = new Random();
+    final String deviceName;
     ArrayList<Sensor> sensors;
     ArrayList<PlatformConnector> connectors;
 
     static Logger logger = Logger.getLogger(DeviceSimulator.class.getName());
 
-    public DeviceSimulator() {
-        sensors = new ArrayList<>();
-        connectors = new ArrayList<>();
+    public DeviceSimulator(String deviceName) {
+       this.deviceName = deviceName;
+       sensors = new ArrayList<>();
+       connectors = new ArrayList<>();
 
+        /* todo: inject PlatformConnector */
         connectors.add(new PlatformConnector("device.properties"));
         connectors.add(new PlatformConnector("javadevice2.properties"));
     }
@@ -42,7 +43,7 @@ public class DeviceSimulator implements SensorType {
     public void measure() {
 
         JsonObject event = new JsonObject();
-        event.addProperty("name", "Simulated Device");
+        event.addProperty("name", this.deviceName);
 
         for (Sensor aSensor : sensors) {
             switch (aSensor.getType()) {
@@ -70,16 +71,25 @@ public class DeviceSimulator implements SensorType {
     }
 
     public static void main(String[] args) {
-        DeviceSimulator theDevice = new DeviceSimulator();
-        theDevice.addSensor(new TemperatureSensor());
-        theDevice.addSensor(new HumiditySensor());
+        ArrayList<DeviceSimulator> devices = new ArrayList<>();
+
+        DeviceSimulator theDevice1 = new DeviceSimulator("rpi-001");
+        theDevice1.addSensor(new TemperatureSensor());
+        theDevice1.addSensor(new HumiditySensor());
+        devices.add(theDevice1);
+        DeviceSimulator theDevice2 = new DeviceSimulator("rpi-002");
+        theDevice2.addSensor(new TemperatureSensor());
+        theDevice2.addSensor(new HumiditySensor());
+        devices.add(theDevice2);
 
         for (int i = 0; i < 10; i++) {
-            theDevice.measure();
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DeviceSimulator.class.getName()).log(Level.SEVERE, null, ex);
+            for (DeviceSimulator device : devices) {
+                device.measure();
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DeviceSimulator.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

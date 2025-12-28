@@ -21,3 +21,7 @@ nbproject/private
 
 # Ignore Gradle build output directory
 build
+
+# keys and certificates: don't push them to github
+pki/ca
+pki/clients

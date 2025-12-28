@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "DeviceSimulator"
-include("app")
+include("deviceclient")
