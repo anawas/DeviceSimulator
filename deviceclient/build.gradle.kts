@@ -35,4 +35,8 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "ch.anawas.simdevice.DeviceSimulator"
+
+    applicationDefaultJvmArgs = listOf(
+        "-Djavax.net.debug=ssl:handshake:verbose"
+    )
 }

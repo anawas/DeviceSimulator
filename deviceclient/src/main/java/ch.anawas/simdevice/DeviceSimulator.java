@@ -19,7 +19,7 @@ import ch.anawas.sensor.*;
  */
 public class DeviceSimulator implements SensorType {
 
-    final String PROPERTIES_FILE_NAME = "javadevice2.properties";
+    final String PROPERTIES_FILE_NAME = "conf/device.properties";
     final String deviceName;
     ArrayList<Sensor> sensors;
     ArrayList<PlatformConnector> connectors;
@@ -32,8 +32,7 @@ public class DeviceSimulator implements SensorType {
        connectors = new ArrayList<>();
 
         /* todo: inject PlatformConnector */
-        connectors.add(new PlatformConnector("device.properties"));
-        connectors.add(new PlatformConnector("javadevice2.properties"));
+        connectors.add(new PlatformConnector(PROPERTIES_FILE_NAME));
     }
 
     public void addSensor(Sensor sensor) {
@@ -77,10 +76,6 @@ public class DeviceSimulator implements SensorType {
         theDevice1.addSensor(new TemperatureSensor());
         theDevice1.addSensor(new HumiditySensor());
         devices.add(theDevice1);
-        DeviceSimulator theDevice2 = new DeviceSimulator("rpi-002");
-        theDevice2.addSensor(new TemperatureSensor());
-        theDevice2.addSensor(new HumiditySensor());
-        devices.add(theDevice2);
 
         for (int i = 0; i < 10; i++) {
             for (DeviceSimulator device : devices) {

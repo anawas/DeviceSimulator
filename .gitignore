@@ -23,5 +23,7 @@ nbproject/private
 build
 
 # keys and certificates: don't push them to github
-pki/ca
-pki/clients
+*.p12
+*.crt
+*.backup
+*.old
