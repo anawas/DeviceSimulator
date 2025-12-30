@@ -37,6 +37,7 @@ application {
     mainClass = "ch.anawas.simdevice.DeviceSimulator"
 
     applicationDefaultJvmArgs = listOf(
-        "-Djavax.net.debug=ssl:handshake:verbose"
+        "-Djava.util.logging.config.file=src/main/resources/logging.properties"
+        // oder "-Djavax.net.debug=ssl:handshake:verbose"
     )
 }
